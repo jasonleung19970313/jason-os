@@ -1,0 +1,17 @@
+{
+  "name": "jason-os",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "tick": "tsx src/tick.ts",
+    "morning": "tsx src/tick.ts --morning",
+    "night": "tsx src/tick.ts --night",
+    "test": "tsx src/tick.ts --dry-run --morning"
+  },
+  "devDependencies": {
+    "dotenv": "^16.6.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
