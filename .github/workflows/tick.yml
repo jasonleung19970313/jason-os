@@ -1,0 +1,42 @@
+ 复制去 GitHub：New file → 路径 .github/workflows/tick.yml → 粘贴此文件内容
+name: Jason OS
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jason-os-tick
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      TZ: Asia/Hong_Kong
+      NOTIFY_CHANNELS: telegram,ntfy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Tick
+        run: npm run tick
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+      - name: Save state
+        run: |
+          git config user.name "jason-os-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore: update daily state"
+          git push
