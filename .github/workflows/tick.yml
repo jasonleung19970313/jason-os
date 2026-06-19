@@ -1,4 +1,4 @@
- 复制去 GitHub：New file → 路径 .github/workflows/tick.yml → 粘贴此文件内容
+
 name: Jason OS
 
 on:
